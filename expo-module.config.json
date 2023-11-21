@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["ExpoCaptureModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.capture.ExpoCaptureModule"]
+  }
+}

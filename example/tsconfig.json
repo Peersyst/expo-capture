@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-capture": ["../src/index"],
+      "expo-capture/*": ["../src/*"]
+    }
+  }
+}

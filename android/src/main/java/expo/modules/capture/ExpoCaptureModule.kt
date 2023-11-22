@@ -34,14 +34,5 @@ class ExpoCaptureModule : Module() {
         "value" to value
       ))
     }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of
-    // the view definition: Prop, Events.
-    View(ExpoCaptureView::class) {
-      // Defines a setter for the `name` prop.
-      Prop("name") { view: ExpoCaptureView, prop: String ->
-        println(prop)
-      }
-    }
   }
 }

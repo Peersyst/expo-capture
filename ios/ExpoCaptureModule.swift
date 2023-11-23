@@ -1,8 +1,9 @@
 import ExpoModulesCore
 
 /**
- * Most of the code is inspired in react-native-screenguard
- * @see https://github.com/gbumps/react-native-screenguard/blob/master/ios/ScreenGuard.mm#L26
+ * Most of the code is inspired in react-native-screenguard and react-native-screenshot-prevent
+ * @see https://github.com/gbumps/react-native-screenguard/blob/master/ios/ScreenGuard.mm
+ * @see https://github.com/killserver/react-native-screenshot-prevent/blob/main/ios/RNScreenshotPrevent.m
  */
 
 let SCREENSHOT_EVENT_NAME = "onScreenshot"

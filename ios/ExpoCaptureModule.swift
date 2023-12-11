@@ -43,12 +43,6 @@ public class ExpoCaptureModule: Module {
             NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
         }
 
-        // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-        // TODO: Remove when package is finished
-        Function("hello") {
-            return "Hello world! 👋"
-        }
-
         // Defines a JavaScript function that always returns a Promise and whose native code
         // is by default dispatched on the different thread than the JavaScript runtime runs on.
         AsyncFunction("preventScreenCapture") { () in

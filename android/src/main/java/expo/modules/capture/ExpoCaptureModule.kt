@@ -18,7 +18,6 @@ class ExpoCaptureModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("ExpoCapture")
 
-    // Defines event names that the module can send to JavaScript.
     Events(SCREENSHOT_EVENT_NAME)
 
     //TODO: Add event emitter
@@ -37,10 +36,18 @@ class ExpoCaptureModule : Module() {
   }
 
   private fun preventScreenCapture() {
-    currentActivity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    try {
+      currentActivity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    } catch (e: Throwable) {
+      throw ExpoCatureException(e)
+    }
   }
 
   private fun allowScreenCapture() {
-    currentActivity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    try {
+      currentActivity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    } catch (e: Throwable) {
+      throw ExpoCatureException(e)
+    }
   }
 }

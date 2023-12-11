@@ -1,5 +1,5 @@
-import { NativeModulesProxy, EventEmitter, Subscription } from "expo-modules-core";
-
+import { NativeModulesProxy, EventEmitter, Subscription, Platform } from "expo-modules-core";
+import { useEffect } from "react";
 // Import the native module. On web, it is currently unsupported and will be undefined.
 // and on native platforms to ExpoCapture.ts
 import ExpoCaptureModule from "./ExpoCaptureModule";
@@ -56,4 +56,35 @@ export function addScreenshotListener(listener: () => void): Subscription {
  */
 export function removeScreenshotListener(subscription: Subscription) {
     emitter.removeSubscription(subscription);
+}
+
+/**
+ * A React hook to prevent screen capturing.
+ * @param enabled If `true`, prevents screen capturing. If `false` or `undefined`, it won't do anything.
+ */
+export function usePreventScreenCapture(enabled?: boolean): void {
+    useEffect(() => {
+        if (!enabled) return;
+        preventScreenCaptureAsync();
+
+        return () => {
+            allowScreenCaptureAsync();
+        };
+    }, []);
+}
+
+/**
+ * A React hook to listen for screenshots.
+ * You do not need to call `removeScreenshotListener` when the component unmounts.
+ */
+export function useScreenshotListener(listener: () => void): void {
+    useEffect(() => {
+        //Only iOS and macOS support screenshot listeners
+        if (!["ios", "macos"].includes(Platform.OS)) return;
+
+        const subscription = addScreenshotListener(listener);
+        return () => {
+            subscription.remove();
+        };
+    }, []);
 }

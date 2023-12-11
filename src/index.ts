@@ -36,3 +36,24 @@ export async function allowScreenCaptureAsync() {
 export function addScreenshotListener(listener: () => void): Subscription {
     return emitter.addListener("onScreenshot", listener);
 }
+
+/**
+ * Removes the subscription you provide, so that you are no longer listening for screenshots.
+ *
+ * If you prefer, you can also call `remove()` on that `Subscription` object, for example:
+ *
+ * ```ts
+ * let mySubscription = addScreenshotListener(() => {
+ *   console.log("You took a screenshot!");
+ * });
+ * ...
+ * mySubscription.remove();
+ * // OR
+ * removeScreenshotListener(mySubscription);
+ * ```
+ *
+ * @param subscription Subscription returned by `addScreenshotListener`.
+ */
+export function removeScreenshotListener(subscription: Subscription) {
+    emitter.removeSubscription(subscription);
+}

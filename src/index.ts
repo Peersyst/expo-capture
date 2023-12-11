@@ -4,10 +4,6 @@ import { NativeModulesProxy, EventEmitter, Subscription } from "expo-modules-cor
 // and on native platforms to ExpoCapture.ts
 import ExpoCaptureModule from "./ExpoCaptureModule";
 
-export function hello(): string {
-    return ExpoCaptureModule.hello();
-}
-
 export async function preventScreenCapture() {
     return await ExpoCaptureModule.preventScreenCapture();
 }

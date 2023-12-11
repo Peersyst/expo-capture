@@ -28,7 +28,7 @@ export default function App() {
     return (
         <View style={styles.container}>
             {/* TODO: Remove `hello` when package is finished */}
-            <Text>{ExpoCapture.hello()}</Text>
+            <Text>{"Hola mundo"}</Text>
             <Button title={prevented ? "Allow" : "Prevent"} onPress={handlePress} />
         </View>
     );

@@ -13,13 +13,15 @@
         "prepublishOnly": "expo-module prepublishOnly",
         "expo-module": "expo-module",
         "open:ios": "open -a \"Xcode\" example/ios",
-        "open:android": "open -a \"Android Studio\" example/android"
+        "open:android": "cd ./example && npx expo run:android --device"
     },
     "keywords": [
         "react-native",
         "expo",
         "expo-capture",
-        "ExpoCapture"
+        "ExpoCapture",
+        "react-native-prevent-screenshot",
+        "react-native-block-screenshot"
     ],
     "repository": "https://github.com/Peersyst/expo-capture",
     "bugs": {

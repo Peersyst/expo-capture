@@ -20,7 +20,7 @@ class ExpoCaptureModule : Module() {
 
     Events(SCREENSHOT_EVENT_NAME)
 
-    //TODO: Add event emitter
+    //TODO: Add event emitter when supported in Android 14
     /* OnCreate {
       ScreenshotEventEmitter(context, appContext.legacyModuleRegistry)
     } */

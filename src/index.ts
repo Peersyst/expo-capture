@@ -60,9 +60,9 @@ export function removeScreenshotListener(subscription: Subscription) {
 
 /**
  * A React hook to prevent screen capturing.
- * @param enabled If `true`, prevents screen capturing. If `false` or `undefined`, it won't do anything.
+ * @param enabled If `true`, prevents screen capturing. If `false`, it won't do anything. Default is true.
  */
-export function usePreventScreenCapture(enabled?: boolean): void {
+export function usePreventScreenCapture(enabled = true): void {
     useEffect(() => {
         if (!enabled) return;
         preventScreenCaptureAsync();

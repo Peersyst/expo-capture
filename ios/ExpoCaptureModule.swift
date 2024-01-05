@@ -66,14 +66,18 @@ public class ExpoCaptureModule: Module {
      * Activates the secure text field
      */
     private func activateSecureTextField() {
-        self.secureTextField!.isSecureTextEntry = true
+        if (self.secureTextField != nil) {
+            self.secureTextField!.isSecureTextEntry = true
+        }
     }
     
     /**
      * Deactivates the secure text field
      */
     private func deactivateSecureTextField() {
-        self.secureTextField!.isSecureTextEntry = false
+        if (self.secureTextField != nil) {
+            self.secureTextField!.isSecureTextEntry = false
+        }
     }
     
     /**
@@ -143,8 +147,8 @@ public class ExpoCaptureModule: Module {
      */
     func allowScreenCapture() {
         if (self.isScreenCapturePrevented) {
-            self.removeSecureTextField()
             self.isScreenCapturePrevented = false
+            self.removeSecureTextField()
         }
     }
     

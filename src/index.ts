@@ -6,6 +6,7 @@ import ExpoCaptureModule from "./ExpoCaptureModule";
 
 const emitter = new EventEmitter(ExpoCaptureModule ?? NativeModulesProxy.ExpoCapture);
 
+let prevention: Promise<void> | undefined = undefined;
 let allowance: Promise<void> | undefined = undefined;
 
 /**
@@ -15,8 +16,9 @@ let allowance: Promise<void> | undefined = undefined;
  * @returns A promise that resolves when the operation is complete.
  */
 export async function preventScreenCaptureAsync() {
-    await Promise.resolve(allowance);
-    await ExpoCaptureModule.preventScreenCapture();
+    await Promise.all([Promise.resolve(prevention), Promise.resolve(allowance)]);
+    prevention = ExpoCaptureModule.preventScreenCapture();
+    await prevention;
 }
 
 /**
@@ -24,6 +26,7 @@ export async function preventScreenCaptureAsync() {
  * @returns A promise that resolves when the operation is complete.
  */
 export async function allowScreenCaptureAsync() {
+    await Promise.all([Promise.resolve(prevention), Promise.resolve(allowance)]);
     allowance = ExpoCaptureModule.allowScreenCapture();
     await allowance;
 }

@@ -65,7 +65,7 @@ public class ExpoCaptureModule: Module {
     /**
      * Activates the secure text field
      */
-    private func activateSecureTextField() {
+    private func activateSecureTextField() throws {
         if (self.secureTextField != nil) {
             self.secureTextField!.isSecureTextEntry = true
         }
@@ -74,7 +74,7 @@ public class ExpoCaptureModule: Module {
     /**
      * Deactivates the secure text field
      */
-    private func deactivateSecureTextField() {
+    private func deactivateSecureTextField() throws {
         if (self.secureTextField != nil) {
             self.secureTextField!.isSecureTextEntry = false
         }
@@ -90,7 +90,8 @@ public class ExpoCaptureModule: Module {
         self.secureTextField!.textAlignment = NSTextAlignment.center
         self.secureTextField!.isUserInteractionEnabled = false
         self.secureTextField!.backgroundColor = UIColor.black
-        self.activateSecureTextField()
+        // Should never throw. If it does throw, it is ok since we'll know something is not right in the code
+        try! self.activateSecureTextField()
         
         let window: UIWindow
         
@@ -123,7 +124,8 @@ public class ExpoCaptureModule: Module {
      * Removes the secure UITextField from the UI Window
      */
     private func removeSecureTextField() {
-        self.deactivateSecureTextField()
+        // Should never throw. If it does throw, it is ok since we'll know something is not right in the code
+        try! self.deactivateSecureTextField()
         
         let stfLayer = self.secureTextField?.layer.sublayers?.last
         stfLayer?.removeFromSuperlayer()
@@ -161,14 +163,19 @@ public class ExpoCaptureModule: Module {
     @objc
     private func activeListener() {
         if (self.isScreenCapturePrevented){
-            self.activateSecureTextField()
+            // Should never fail. If it does an error is thrown anyway.
+            try! self.activateSecureTextField()
         }
     }
     
     @objc
     private func resignListener() {
         if (self.isScreenCapturePrevented) {
-            self.deactivateSecureTextField()
+            do {
+                try self.deactivateSecureTextField()
+            } catch {
+                // Should be ok if this fails, as the app is resigned.
+            }
         }
     }
 }

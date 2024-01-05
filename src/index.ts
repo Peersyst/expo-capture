@@ -6,6 +6,8 @@ import ExpoCaptureModule from "./ExpoCaptureModule";
 
 const emitter = new EventEmitter(ExpoCaptureModule ?? NativeModulesProxy.ExpoCapture);
 
+let allowance: Promise<void> | undefined = undefined;
+
 /**
  * Prevents the user from taking screenshots in the app.
  * On Android, it will set the FLAG_SECURE flag on the window.
@@ -13,7 +15,8 @@ const emitter = new EventEmitter(ExpoCaptureModule ?? NativeModulesProxy.ExpoCap
  * @returns A promise that resolves when the operation is complete.
  */
 export async function preventScreenCaptureAsync() {
-    return await ExpoCaptureModule.preventScreenCapture();
+    await Promise.resolve(allowance);
+    await ExpoCaptureModule.preventScreenCapture();
 }
 
 /**
@@ -21,7 +24,8 @@ export async function preventScreenCaptureAsync() {
  * @returns A promise that resolves when the operation is complete.
  */
 export async function allowScreenCaptureAsync() {
-    return await ExpoCaptureModule.allowScreenCapture();
+    allowance = ExpoCaptureModule.allowScreenCapture();
+    await allowance;
 }
 
 /**
@@ -70,7 +74,7 @@ export function usePreventScreenCapture(enabled = true): void {
         return () => {
             allowScreenCaptureAsync();
         };
-    }, []);
+    }, [enabled]);
 }
 
 /**

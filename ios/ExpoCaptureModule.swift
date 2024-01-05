@@ -143,8 +143,8 @@ public class ExpoCaptureModule: Module {
      */
     func allowScreenCapture() {
         if (self.isScreenCapturePrevented) {
-            self.isScreenCapturePrevented = false
             self.removeSecureTextField()
+            self.isScreenCapturePrevented = false
         }
     }
     

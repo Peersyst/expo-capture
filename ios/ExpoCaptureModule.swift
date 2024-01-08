@@ -28,19 +28,11 @@ public class ExpoCaptureModule: Module {
         // Starts observing when the module loads
         OnStartObserving {
             NotificationCenter.default.addObserver(self, selector: #selector(self.screenshotListener), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(self.activeListener), name: UIApplication.didBecomeActiveNotification, object: nil)
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(self.resignListener), name: UIApplication.willResignActiveNotification, object: nil)
         }
         
         // Stops oberving when the module loads
         OnStopObserving {
             NotificationCenter.default.removeObserver(self, name: UIApplication.userDidTakeScreenshotNotification, object: nil)
-            
-            NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
-            
-            NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
         }
 
         // Defines a JavaScript function that always returns a Promise and whose native code
@@ -65,7 +57,7 @@ public class ExpoCaptureModule: Module {
     /**
      * Activates the secure text field
      */
-    private func activateSecureTextField() throws {
+    private func activateSecureTextField() {
         if (self.secureTextField != nil) {
             self.secureTextField!.isSecureTextEntry = true
         }
@@ -74,7 +66,7 @@ public class ExpoCaptureModule: Module {
     /**
      * Deactivates the secure text field
      */
-    private func deactivateSecureTextField() throws {
+    private func deactivateSecureTextField() {
         if (self.secureTextField != nil) {
             self.secureTextField!.isSecureTextEntry = false
         }
@@ -90,8 +82,8 @@ public class ExpoCaptureModule: Module {
         self.secureTextField!.textAlignment = NSTextAlignment.center
         self.secureTextField!.isUserInteractionEnabled = false
         self.secureTextField!.backgroundColor = UIColor.black
-        // Should never throw. If it does throw, it is ok since we'll know something is not right in the code
-        try! self.activateSecureTextField()
+
+        self.activateSecureTextField()
         
         let window: UIWindow
         
@@ -124,8 +116,7 @@ public class ExpoCaptureModule: Module {
      * Removes the secure UITextField from the UI Window
      */
     private func removeSecureTextField() {
-        // Should never throw. If it does throw, it is ok since we'll know something is not right in the code
-        try! self.deactivateSecureTextField()
+        self.deactivateSecureTextField()
         
         let stfLayer = self.secureTextField?.layer.sublayers?.last
         stfLayer?.removeFromSuperlayer()
@@ -157,25 +148,5 @@ public class ExpoCaptureModule: Module {
     @objc
     private func screenshotListener() {
         sendEvent(SCREENSHOT_EVENT_NAME)
-    }
-    
-    // Handle app hiding when resigning focus, this responsibility belongs to a different module
-    @objc
-    private func activeListener() {
-        if (self.isScreenCapturePrevented){
-            // Should never fail. If it does an error is thrown anyway.
-            try! self.activateSecureTextField()
-        }
-    }
-    
-    @objc
-    private func resignListener() {
-        if (self.isScreenCapturePrevented) {
-            do {
-                try self.deactivateSecureTextField()
-            } catch {
-                // Should be ok if this fails, as the app is resigned.
-            }
-        }
     }
 }

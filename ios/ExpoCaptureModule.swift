@@ -28,6 +28,10 @@ public class ExpoCaptureModule: Module {
         // Starts observing when the module loads
         OnStartObserving {
             NotificationCenter.default.addObserver(self, selector: #selector(self.screenshotListener), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
+
+            NotificationCenter.default.addObserver(self, selector: #selector(self.activeListener), name: UIApplication.didBecomeActiveNotification, object: nil)
+
+            NotificationCenter.default.addObserver(self, selector: #selector(self.resignListener), name: UIApplication.willResignActiveNotification, object: nil)
         }
         
         // Stops oberving when the module loads
@@ -148,5 +152,20 @@ public class ExpoCaptureModule: Module {
     @objc
     private func screenshotListener() {
         sendEvent(SCREENSHOT_EVENT_NAME)
+    }
+
+    // Handle app hiding when resigning focus, this responsibility belongs to a different module
+    @objc
+    private func activeListener() {
+        if (self.isScreenCapturePrevented){
+            self.activateSecureTextField()
+        }
+    }
+
+    @objc
+    private func resignListener() {
+        if (self.isScreenCapturePrevented) {
+            self.deactivateSecureTextField()
+        }
     }
 }

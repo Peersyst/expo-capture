@@ -158,14 +158,18 @@ public class ExpoCaptureModule: Module {
     @objc
     private func activeListener() {
         if (self.isScreenCapturePrevented){
-            self.activateSecureTextField()
+            if (self.secureTextField != nil) {
+                self.secureTextField!.isSecureTextEntry = true
+            }
         }
     }
 
     @objc
     private func resignListener() {
         if (self.isScreenCapturePrevented) {
-            self.deactivateSecureTextField()
+            if (self.secureTextField != nil) {
+                self.secureTextField!.isSecureTextEntry = false
+            }
         }
     }
 }

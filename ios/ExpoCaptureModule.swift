@@ -54,13 +54,16 @@ public class ExpoCaptureModule: Module {
         }
     }
     
+    @objc
     private var isScreenCapturePrevented: Bool = false
     
+    @objc
     private var secureTextField: UITextField?
     
     /**
      * Activates the secure text field
      */
+     @objc
     private func activateSecureTextField() {
         if (self.secureTextField != nil) {
             self.secureTextField!.isSecureTextEntry = true
@@ -70,6 +73,7 @@ public class ExpoCaptureModule: Module {
     /**
      * Deactivates the secure text field
      */
+     @objc
     private func deactivateSecureTextField() {
         if (self.secureTextField != nil) {
             self.secureTextField!.isSecureTextEntry = false
@@ -158,18 +162,14 @@ public class ExpoCaptureModule: Module {
     @objc
     private func activeListener() {
         if (self.isScreenCapturePrevented){
-            if (self.secureTextField != nil) {
-                self.secureTextField!.isSecureTextEntry = true
-            }
+            self.activateSecureTextField()
         }
     }
 
     @objc
     private func resignListener() {
         if (self.isScreenCapturePrevented) {
-            if (self.secureTextField != nil) {
-                self.secureTextField!.isSecureTextEntry = false
-            }
+            self.deactivateSecureTextField()
         }
     }
 }

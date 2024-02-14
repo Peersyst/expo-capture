@@ -1,6 +1,6 @@
 {
     "name": "expo-capture",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "description": "Screen capture native module for expo.",
     "private": false,
     "main": "build/index.js",

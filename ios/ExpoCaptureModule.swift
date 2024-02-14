@@ -25,7 +25,7 @@ public class ExpoCaptureModule: Module {
         // Defines event names that the module can send to JavaScript.
         Events(SCREENSHOT_EVENT_NAME)
 
-        OnStart {
+        OnCreate {
             if #available(iOS 13.0, *) {
                 NotificationCenter.default.addObserver(self, selector: #selector(self.activeListener), name: UIScene.willEnterForegroundNotification, object: nil)
 

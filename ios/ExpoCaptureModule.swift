@@ -28,31 +28,19 @@ public class ExpoCaptureModule: Module {
         // Starts observing when the module loads
         OnStartObserving {
             NotificationCenter.default.addObserver(self, selector: #selector(self.screenshotListener), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
-            
-            if #available(iOS 13.0, *) {
-                NotificationCenter.default.addObserver(self, selector: #selector(self.activeListener), name: UIScene.willEnterForegroundNotification, object: nil)
-                
-                NotificationCenter.default.addObserver(self, selector: #selector(self.resignListener), name: UIScene.didEnterBackgroundNotification, object: nil)
-            } else {
-                NotificationCenter.default.addObserver(self, selector: #selector(self.activeListener), name: UIApplication.willEnterForegroundNotification, object: nil)
-                
-                NotificationCenter.default.addObserver(self, selector: #selector(self.resignListener), name: UIApplication.didEnterBackgroundNotification, object: nil)
-            }
         }
         
-        // Stops oberving when the module loads
+        // Stops observing when the module loads
         OnStopObserving {
             NotificationCenter.default.removeObserver(self, name: UIApplication.userDidTakeScreenshotNotification, object: nil)
-            
-            if #available(iOS 13.0, *) {
-                NotificationCenter.default.removeObserver(self, name: UIScene.willEnterForegroundNotification, object: nil)
-                
-                NotificationCenter.default.removeObserver(self, name: UIScene.didEnterBackgroundNotification, object: nil)
-            } else {
-                NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
-                
-                NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
-            }
+        }
+
+        OnAppEntersForeground {
+            self.activeListener()
+        }
+
+        OnAppEntersBackground {
+            self.resignListener()
         }
 
         // Defines a JavaScript function that always returns a Promise and whose native code

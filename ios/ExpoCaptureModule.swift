@@ -24,9 +24,12 @@ public class ExpoCaptureModule: Module {
 
         // Defines event names that the module can send to JavaScript.
         Events(SCREENSHOT_EVENT_NAME)
+        
+        // Starts observing when the module loads
+        OnStartObserving {
+            NotificationCenter.default.addObserver(self, selector: #selector(self.screenshotListener), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
 
-        OnCreate {
-            if #available(iOS 13.0, *) {
+             if #available(iOS 13.0, *) {
                 NotificationCenter.default.addObserver(self, selector: #selector(self.activeListener), name: UIScene.willEnterForegroundNotification, object: nil)
 
                 NotificationCenter.default.addObserver(self, selector: #selector(self.resignListener), name: UIScene.didEnterBackgroundNotification, object: nil)
@@ -36,8 +39,11 @@ public class ExpoCaptureModule: Module {
                 NotificationCenter.default.addObserver(self, selector: #selector(self.resignListener), name: UIApplication.didEnterBackgroundNotification, object: nil)
             }
         }
+        
+        // Stops observing when the module loads
+        OnStopObserving {
+            NotificationCenter.default.removeObserver(self, name: UIApplication.userDidTakeScreenshotNotification, object: nil)
 
-        OnDestroy {
             if #available(iOS 13.0, *) {
                 NotificationCenter.default.removeObserver(self, name: UIScene.willEnterForegroundNotification, object: nil)
 
@@ -47,16 +53,6 @@ public class ExpoCaptureModule: Module {
 
                 NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
             }
-        }
-        
-        // Starts observing when the module loads
-        OnStartObserving {
-            NotificationCenter.default.addObserver(self, selector: #selector(self.screenshotListener), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
-        }
-        
-        // Stops observing when the module loads
-        OnStopObserving {
-            NotificationCenter.default.removeObserver(self, name: UIApplication.userDidTakeScreenshotNotification, object: nil)
         }
 
         // Defines a JavaScript function that always returns a Promise and whose native code

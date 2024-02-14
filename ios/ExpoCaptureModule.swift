@@ -28,15 +28,31 @@ public class ExpoCaptureModule: Module {
         // Starts observing when the module loads
         OnStartObserving {
             NotificationCenter.default.addObserver(self, selector: #selector(self.screenshotListener), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
-
-            NotificationCenter.default.addObserver(self, selector: #selector(self.activeListener), name: UIApplication.didBecomeActiveNotification, object: nil)
-
-            NotificationCenter.default.addObserver(self, selector: #selector(self.resignListener), name: UIApplication.willResignActiveNotification, object: nil)
+            
+            if #available(iOS 13.0, *) {
+                NotificationCenter.default.addObserver(self, selector: #selector(self.activeListener), name: UIScene.willEnterForegroundNotification, object: nil)
+                
+                NotificationCenter.default.addObserver(self, selector: #selector(self.resignListener), name: UIScene.didEnterBackgroundNotification, object: nil)
+            } else {
+                NotificationCenter.default.addObserver(self, selector: #selector(self.activeListener), name: UIApplication.willEnterForegroundNotification, object: nil)
+                
+                NotificationCenter.default.addObserver(self, selector: #selector(self.resignListener), name: UIApplication.didEnterBackgroundNotification, object: nil)
+            }
         }
         
         // Stops oberving when the module loads
         OnStopObserving {
             NotificationCenter.default.removeObserver(self, name: UIApplication.userDidTakeScreenshotNotification, object: nil)
+            
+            if #available(iOS 13.0, *) {
+                NotificationCenter.default.removeObserver(self, name: UIScene.willEnterForegroundNotification, object: nil)
+                
+                NotificationCenter.default.removeObserver(self, name: UIScene.didEnterBackgroundNotification, object: nil)
+            } else {
+                NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+                
+                NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+            }
         }
 
         // Defines a JavaScript function that always returns a Promise and whose native code
@@ -54,16 +70,13 @@ public class ExpoCaptureModule: Module {
         }
     }
     
-    @objc
     private var isScreenCapturePrevented: Bool = false
     
-    @objc
     private var secureTextField: UITextField?
     
     /**
      * Activates the secure text field
      */
-     @objc
     private func activateSecureTextField() {
         if (self.secureTextField != nil) {
             self.secureTextField!.isSecureTextEntry = true
@@ -73,7 +86,6 @@ public class ExpoCaptureModule: Module {
     /**
      * Deactivates the secure text field
      */
-     @objc
     private func deactivateSecureTextField() {
         if (self.secureTextField != nil) {
             self.secureTextField!.isSecureTextEntry = false
